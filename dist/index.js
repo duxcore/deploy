@@ -79,9 +79,9 @@ function run() {
                     return [4 /*yield*/, getConfig(client, configPath)];
                 case 1:
                     config = _a.sent();
+                    console.log("Testing enviornments...");
                     if (!config.envs || config.envs.length == 0)
                         throw new Error('No deployment environments were found in the configuration file...');
-                    console.log("Testing enviornments...");
                     return [4 /*yield*/, config.envs.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, validateEnv(env)];

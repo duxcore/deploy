@@ -12,9 +12,8 @@ export async function run() {
     const client = github.getOctokit(token);
     const config = await getConfig(client, configPath);
 
-    if (!config.envs || config.envs.length == 0) throw new Error('No deployment environments were found in the configuration file...')
-
     console.log("Testing enviornments...");
+    if (!config.envs || config.envs.length == 0) throw new Error('No deployment environments were found in the configuration file...')
     await config.envs.map(async env => await validateEnv(env));
     console.log("All enviornments are valid!");
 
