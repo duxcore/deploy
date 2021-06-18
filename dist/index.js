@@ -100,7 +100,9 @@ function getConfig(client, path) {
         }).then(function (res) {
             var json = JSON.parse(res.data.toString());
         }).catch(function (err) {
-            reject(err);
+            if (err.message.includes("Not Found"))
+                return reject(new Error('Could not find configuration file.'));
+            return reject(err);
         });
     });
 }
