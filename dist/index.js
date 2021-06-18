@@ -73,7 +73,7 @@ function run() {
                 token = core.getInput('repo-token', { required: true });
                 configPath = core.getInput('config', { required: true });
                 client = github.getOctokit(token);
-                config = getConfig(client, configPath);
+                config = getConfig(client, configPath).catch(function (err) { throw err; });
                 console.log(config);
             }
             catch (err) {
