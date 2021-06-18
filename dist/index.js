@@ -82,12 +82,12 @@ function run() {
                     console.log("Testing enviornments...");
                     if (!config.environments || config.environments.length == 0)
                         throw new Error('No deployment environments were found in the configuration file...');
-                    return [4 /*yield*/, config.environments.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    return [4 /*yield*/, Promise.all(config.environments.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, validateEnv(env)];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
-                        }); }); })];
+                        }); }); }))];
                 case 2:
                     _a.sent();
                     console.log("All enviornments are valid!");
