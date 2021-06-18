@@ -20,7 +20,7 @@ export async function run() {
   }
 }
 
-function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<any> {
+function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<Configuration> {
   return new Promise((resolve, reject) => {
     client.rest.repos.getContent({
       owner: github.context.repo.owner,
@@ -29,10 +29,8 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<a
     }).then(res => {
       const raw = res.data['content'];
       const buff = Buffer.from(raw, 'base64');
-
       const json = JSON.parse(buff.toString('utf-8'));
-
-      resolve(json);
+      resolve(json as Configuration);
     }).catch(err => {
       if (err.message.includes("Not Found")) return reject(new Error(`Could not find configuration file (Configured Path: ${path}).`));
       return reject(err);
