@@ -96,10 +96,10 @@ function getConfig(client, path) {
         client.rest.repos.getContent({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            path: path
+            path: path,
         }).then(function (res) {
             var json = res.data;
-            resolve(json);
+            resolve(json.toLocaleString());
         }).catch(function (err) {
             if (err.message.includes("Not Found"))
                 return reject(new Error("Could not find configuration file (Configured Path: " + path + ")."));
