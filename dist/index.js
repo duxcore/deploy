@@ -101,7 +101,7 @@ function getConfig(client, path) {
             var json = JSON.parse(res.data.toString());
         }).catch(function (err) {
             if (err.message.includes("Not Found"))
-                return reject(new Error('Could not find configuration file.'));
+                return reject(new Error("Could not find configuration file (Configured Path: " + path + ")."));
             return reject(err);
         });
     });
