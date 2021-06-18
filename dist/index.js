@@ -100,7 +100,7 @@ function getConfig(client, path) {
         }).then(function (res) {
             var raw = res.data['content'];
             var buff = Buffer.from(raw, 'base64');
-            var json = buff.toString('utf-8');
+            var json = JSON.parse(buff.toString('utf-8'));
             resolve(json.toLocaleString());
         }).catch(function (err) {
             if (err.message.includes("Not Found"))

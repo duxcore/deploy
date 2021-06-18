@@ -30,7 +30,7 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<a
       const raw = res.data['content'];
       const buff = Buffer.from(raw, 'base64');
 
-      const json = buff.toString('utf-8');
+      const json = JSON.parse(buff.toString('utf-8'));
 
       resolve(json.toLocaleString());
     }).catch(err => {
