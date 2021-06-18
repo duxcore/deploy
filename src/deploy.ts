@@ -7,9 +7,11 @@ import { Configuration } from './types';
 export async function run() {
   try {
     const token = core.getInput('repo-token', { required: true });
+    const configPath = core.getInput('config', { required: true });
+
     const client = github.getOctokit(token);
 
-    const config = getConfig(client);
+    const config = getConfig(client, configPath);
 
     console.log(config);
 
@@ -19,11 +21,11 @@ export async function run() {
   }
 }
 
-async function getConfig(client: InstanceType<typeof GitHub>): Promise<Configuration> {
+async function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<Configuration> {
   const config = await client.rest.repos.getContent({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    path: ".deployer.json"
+    path: path
   });
   
   return JSON.parse(config.data.toString()) as Configuration;

@@ -6,11 +6,12 @@
   "author": "Jackson <jrobe3221@gmail.com>",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && ncc build lib/index.js"
   },
   "dependencies": {
     "@actions/core": "^1.4.0",
     "@actions/github": "^5.0.0",
+    "@vercel/ncc": "^0.28.6",
     "js-yaml": "^4.1.0"
   }
 }
