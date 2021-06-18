@@ -98,7 +98,7 @@ function getConfig(client, path) {
             repo: github.context.repo.repo,
             path: path
         }).then(function (res) {
-            var json = res.data.toString();
+            var json = res.data;
             resolve(json);
         }).catch(function (err) {
             if (err.message.includes("Not Found"))
