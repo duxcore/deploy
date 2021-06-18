@@ -94,7 +94,7 @@ function getConfig(client, path) {
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
                         path: path
-                    })];
+                    }).catch(function (err) { throw err; })];
                 case 1:
                     config = _a.sent();
                     return [2 /*return*/, JSON.parse(config.data.toString())];

@@ -26,7 +26,7 @@ async function getConfig(client: InstanceType<typeof GitHub>, path: string): Pro
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     path: path
-  });
+  }).catch(err => { throw err; })
   
   return JSON.parse(config.data.toString()) as Configuration;
 }
