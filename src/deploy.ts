@@ -12,7 +12,7 @@ export async function run() {
     const client = github.getOctokit(token);
     const config = await getConfig(client, configPath);
 
-    console.log(config);
+    if (!config.envs || config.envs.length == 0) throw new Error('No deployment environments were found in the configuration file...')
 
   } catch (err) {
     core.error(err as Error);

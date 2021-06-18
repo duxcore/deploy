@@ -78,7 +78,8 @@ function run() {
                     return [4 /*yield*/, getConfig(client, configPath)];
                 case 1:
                     config = _a.sent();
-                    console.log(config);
+                    if (!config.envs || config.envs.length == 0)
+                        throw new Error('No deployment environments were found in the configuration file...');
                     return [3 /*break*/, 3];
                 case 2:
                     err_1 = _a.sent();
