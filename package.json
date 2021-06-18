@@ -1,0 +1,16 @@
+{
+  "name": "deploy",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "repository": "https://github.com/duxcore/deploy",
+  "author": "Jackson <jrobe3221@gmail.com>",
+  "license": "GPL-3.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@actions/github": "^5.0.0",
+    "js-yaml": "^4.1.0"
+  }
+}
