@@ -13,8 +13,8 @@ export async function run() {
     const config = await getConfig(client, configPath);
 
     console.log("Testing enviornments...");
-    if (!config.envs || config.envs.length == 0) throw new Error('No deployment environments were found in the configuration file...')
-    await config.envs.map(async env => await validateEnv(env));
+    if (!config.environments || config.environments.length == 0) throw new Error('No deployment environments were found in the configuration file...')
+    await config.environments.map(async env => await validateEnv(env));
     console.log("All enviornments are valid!");
 
     console.log(config);

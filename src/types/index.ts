@@ -1,5 +1,5 @@
 export interface Configuration {
-  envs: DeploymentEnv[]
+  environments: DeploymentEnv[]
 }
 
 export interface DeploymentEnv {

@@ -80,9 +80,9 @@ function run() {
                 case 1:
                     config = _a.sent();
                     console.log("Testing enviornments...");
-                    if (!config.envs || config.envs.length == 0)
+                    if (!config.environments || config.environments.length == 0)
                         throw new Error('No deployment environments were found in the configuration file...');
-                    return [4 /*yield*/, config.envs.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    return [4 /*yield*/, config.environments.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, validateEnv(env)];
                                 case 1: return [2 /*return*/, _a.sent()];
