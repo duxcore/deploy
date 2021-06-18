@@ -11,7 +11,7 @@ export async function run() {
 
     const client = github.getOctokit(token);
 
-    const config = getConfig(client, configPath);
+    const config = getConfig(client, configPath).catch(err => { throw err });
 
     console.log(config);
 
