@@ -67,38 +67,40 @@ var core = __importStar(__nccwpck_require__(186));
 var github = __importStar(__nccwpck_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var token, configPath, client, config;
+        var token, configPath, client, config, err_1;
         return __generator(this, function (_a) {
-            try {
-                token = core.getInput('repo-token', { required: true });
-                configPath = core.getInput('config', { required: true });
-                client = github.getOctokit(token);
-                config = getConfig(client, configPath).catch(function (err) { throw err; });
-                console.log(config);
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    token = core.getInput('repo-token', { required: true });
+                    configPath = core.getInput('config', { required: true });
+                    client = github.getOctokit(token);
+                    return [4 /*yield*/, getConfig(client, configPath)];
+                case 1:
+                    config = _a.sent();
+                    console.log(config);
+                    return [3 /*break*/, 3];
+                case 2:
+                    err_1 = _a.sent();
+                    core.error(err_1);
+                    core.setFailed(err_1.message);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-            catch (err) {
-                core.error(err);
-                core.setFailed(err.message);
-            }
-            return [2 /*return*/];
         });
     });
 }
 exports.run = run;
 function getConfig(client, path) {
-    return __awaiter(this, void 0, void 0, function () {
-        var config;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, client.rest.repos.getContent({
-                        owner: github.context.repo.owner,
-                        repo: github.context.repo.repo,
-                        path: path
-                    }).catch(function (err) { throw err; })];
-                case 1:
-                    config = _a.sent();
-                    return [2 /*return*/, JSON.parse(config.data.toString())];
-            }
+    return new Promise(function (resolve, reject) {
+        client.rest.repos.getContent({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            path: path
+        }).then(function (res) {
+            var json = JSON.parse(res.data.toString());
+        }).catch(function (err) {
+            reject(err);
         });
     });
 }
