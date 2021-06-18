@@ -125,16 +125,14 @@ function getConfig(client, path) {
     });
 }
 function validateEnv(env) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            if (!env.dir)
-                throw new Error("Missing enviornment directory.");
-            if (!env.name)
-                throw new Error("Missing enviornment name.");
-            if (!env.url)
-                throw new Error("Missing envornment deployment server url.");
-            return [2 /*return*/, true];
-        });
+    return new Promise(function (resolve, reject) {
+        if (!env.dir)
+            return reject(new Error("Missing enviornment directory."));
+        if (!env.name)
+            return reject(new Error("Missing enviornment name."));
+        if (!env.url)
+            return reject(new Error("Missing envornment deployment server url."));
+        return resolve(true);
     });
 }
 

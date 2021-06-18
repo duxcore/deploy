@@ -45,10 +45,12 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<C
   });  
 }
 
-async function validateEnv(env: DeploymentEnvironment): Promise<boolean> {
-  if (!env.dir) throw new Error("Missing enviornment directory.");
-  if (!env.name) throw new Error("Missing enviornment name.");
-  if (!env.url) throw new Error("Missing envornment deployment server url.");
+function validateEnv(env: DeploymentEnvironment): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    if (!env.dir) return reject(new Error("Missing enviornment directory."));
+    if (!env.name) return reject(new Error("Missing enviornment name."));
+    if (!env.url) return reject(new Error("Missing envornment deployment server url."));
 
-  return true;
+    return resolve(true);
+  });
 }
