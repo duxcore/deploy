@@ -11,7 +11,7 @@ export async function run() {
 
     const client = github.getOctokit(token);
 
-    const config = getConfig(client, configPath).catch(err => { throw err });
+    const config = await getConfig(client, configPath);
 
     console.log(config);
 
@@ -21,12 +21,16 @@ export async function run() {
   }
 }
 
-async function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<Configuration> {
-  const config = await client.rest.repos.getContent({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    path: path
-  }).catch(err => { throw err; })
-  
-  return JSON.parse(config.data.toString()) as Configuration;
+function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<Configuration> {
+  return new Promise((resolve, reject) => {
+    client.rest.repos.getContent({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      path: path
+    }).then(res => {
+      const json = JSON.parse(res.data.toString())
+    }).catch(err => { 
+      reject(err);
+    })
+  });  
 }
