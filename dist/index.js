@@ -101,7 +101,7 @@ function getConfig(client, path) {
             var raw = res.data['content'];
             var buff = Buffer.from(raw, 'base64');
             var json = JSON.parse(buff.toString('utf-8'));
-            resolve(json.toLocaleString());
+            resolve(json);
         }).catch(function (err) {
             if (err.message.includes("Not Found"))
                 return reject(new Error("Could not find configuration file (Configured Path: " + path + ")."));
