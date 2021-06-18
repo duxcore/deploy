@@ -10,7 +10,6 @@ export async function run() {
     const configPath = core.getInput('config', { required: true });
 
     const client = github.getOctokit(token);
-
     const config = await getConfig(client, configPath);
 
     console.log(config);
@@ -21,14 +20,15 @@ export async function run() {
   }
 }
 
-function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<Configuration> {
+function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<string> {
   return new Promise((resolve, reject) => {
     client.rest.repos.getContent({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       path: path
     }).then(res => {
-      const json = JSON.parse(res.data.toString())
+      const json = res.data.toString();
+      resolve(json);
     }).catch(err => {
       if (err.message.includes("Not Found")) return reject(new Error(`Could not find configuration file (Configured Path: ${path}).`));
       return reject(err);
