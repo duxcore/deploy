@@ -68,10 +68,11 @@ var github = __importStar(__nccwpck_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function () {
         var token, configPath, client, config, err_1;
+        var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    _a.trys.push([0, 3, , 4]);
                     token = core.getInput('repo-token', { required: true });
                     configPath = core.getInput('config', { required: true });
                     client = github.getOctokit(token);
@@ -80,13 +81,24 @@ function run() {
                     config = _a.sent();
                     if (!config.envs || config.envs.length == 0)
                         throw new Error('No deployment environments were found in the configuration file...');
-                    return [3 /*break*/, 3];
+                    console.log("Testing enviornments...");
+                    return [4 /*yield*/, config.envs.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, validateEnv(env)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); })];
                 case 2:
+                    _a.sent();
+                    console.log("All enviornments are valid!");
+                    console.log(config);
+                    return [3 /*break*/, 4];
+                case 3:
                     err_1 = _a.sent();
                     core.error(err_1);
                     core.setFailed(err_1.message);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -94,6 +106,7 @@ function run() {
 exports.run = run;
 function getConfig(client, path) {
     return new Promise(function (resolve, reject) {
+        console.log("Fetching configuration file...");
         client.rest.repos.getContent({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
@@ -102,11 +115,25 @@ function getConfig(client, path) {
             var raw = res.data['content'];
             var buff = Buffer.from(raw, 'base64');
             var json = JSON.parse(buff.toString('utf-8'));
+            console.log("Fetched configuration file success!");
             resolve(json);
         }).catch(function (err) {
             if (err.message.includes("Not Found"))
                 return reject(new Error("Could not find configuration file (Configured Path: " + path + ")."));
             return reject(err);
+        });
+    });
+}
+function validateEnv(env) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!env.dir)
+                throw new Error("Missing enviornment directory.");
+            if (!env.name)
+                throw new Error("Missing enviornment name.");
+            if (!env.url)
+                throw new Error("Missing envornment deployment server url.");
+            return [2 /*return*/, true];
         });
     });
 }
