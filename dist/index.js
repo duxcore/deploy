@@ -98,7 +98,9 @@ function getConfig(client, path) {
             repo: github.context.repo.repo,
             path: path,
         }).then(function (res) {
-            var json = res.data;
+            var raw = res.data['content'];
+            var buff = Buffer.from(raw);
+            var json = buff.toString('utf-8');
             resolve(json.toLocaleString());
         }).catch(function (err) {
             if (err.message.includes("Not Found"))

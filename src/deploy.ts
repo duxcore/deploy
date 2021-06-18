@@ -27,7 +27,11 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<a
       repo: github.context.repo.repo,
       path: path,
     }).then(res => {
-      const json = res.data;
+      const raw = res.data['content'];
+      const buff = Buffer.from(raw);
+
+      const json = buff.toString('utf-8');
+
       resolve(json.toLocaleString());
     }).catch(err => {
       if (err.message.includes("Not Found")) return reject(new Error(`Could not find configuration file (Configured Path: ${path}).`));
