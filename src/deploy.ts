@@ -28,7 +28,7 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<a
       path: path,
     }).then(res => {
       const raw = res.data['content'];
-      const buff = Buffer.from(raw);
+      const buff = Buffer.from(raw, 'base64');
 
       const json = buff.toString('utf-8');
 
