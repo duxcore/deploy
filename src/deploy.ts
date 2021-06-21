@@ -36,7 +36,7 @@ export async function run() {
 
     const payload = createPayload(client, branch, envName, containers);
 
-    console.log(payload);
+    console.log(JSON.stringify(payload, null, 2));
 
   } catch (err) {
     core.error(err as Error);

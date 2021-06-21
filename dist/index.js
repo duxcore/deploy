@@ -99,7 +99,7 @@ function run() {
                         };
                     });
                     payload = createPayload(client, branch, envName, containers);
-                    console.log(payload);
+                    console.log(JSON.stringify(payload, null, 2));
                     return [3 /*break*/, 3];
                 case 2:
                     err_1 = _a.sent();
