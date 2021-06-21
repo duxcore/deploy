@@ -3,6 +3,7 @@ import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 import * as yaml from 'js-yaml';
 import { Configuration, DeploymentEnv as DeploymentEnvironment } from './types';
+import { DeploymentContainer, DeploymentPayload } from './types/DeploymentPayload';
 
 export async function run() {
   try {
@@ -12,12 +13,30 @@ export async function run() {
     const client = github.getOctokit(token);
     const config = await getConfig(client, configPath);
 
-    console.log("Testing enviornments...");
-    if (!config.environments || config.environments.length == 0) throw new Error('No deployment environments were found in the configuration file...')
-    await Promise.all(config.environments.map(async env => await validateEnv(env)));
-    console.log("All enviornments are valid!");
+    if (!config.env.name) throw new Error("Must define env name");
+    if (!config.env.branch) throw new Error("Must define env branch");
 
-    console.log(config);
+    const envName = config.env.name;
+    const branch = config.env.branch;
+
+    if (!config.containers || config.containers.length == 0) return;
+
+    const containers: DeploymentContainer[] = config.containers.map(c => {
+      return {
+        dir: c.dir,
+        envVars: c.envVars.map(ev => {
+          const secret = core.getInput(ev.secret, { required: true });
+          return {
+            key: ev.name,
+            value: secret
+          }
+        })
+      };
+    });
+
+    const payload = createPayload(client, branch, envName, containers);
+
+    console.log(payload);
 
   } catch (err) {
     core.error(err as Error);
@@ -45,12 +64,19 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<C
   });  
 }
 
-function validateEnv(env: DeploymentEnvironment): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    if (!env.dir) return reject(new Error("Missing enviornment directory."));
-    if (!env.name) return reject(new Error("Missing enviornment name."));
-    if (!env.url) return reject(new Error("Missing envornment deployment server url."));
+function createPayload(
+  client: InstanceType<typeof GitHub>, 
+  branch: string, 
+  envName: string, 
+  containers: DeploymentContainer[]
+  ): DeploymentPayload {
 
-    return resolve(true);
-  });
+    const url = github.context.repo.repo;
+
+    return {
+      url,
+      branch,
+      envName,
+      containers
+    }
 }

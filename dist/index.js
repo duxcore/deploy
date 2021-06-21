@@ -67,38 +67,46 @@ var core = __importStar(__nccwpck_require__(186));
 var github = __importStar(__nccwpck_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var token, configPath, client, config, err_1;
-        var _this = this;
+        var token, configPath, client, config, envName, branch, containers, payload, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
+                    _a.trys.push([0, 2, , 3]);
                     token = core.getInput('repo-token', { required: true });
                     configPath = core.getInput('config', { required: true });
                     client = github.getOctokit(token);
                     return [4 /*yield*/, getConfig(client, configPath)];
                 case 1:
                     config = _a.sent();
-                    console.log("Testing enviornments...");
-                    if (!config.environments || config.environments.length == 0)
-                        throw new Error('No deployment environments were found in the configuration file...');
-                    return [4 /*yield*/, Promise.all(config.environments.map(function (env) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0: return [4 /*yield*/, validateEnv(env)];
-                                case 1: return [2 /*return*/, _a.sent()];
-                            }
-                        }); }); }))];
+                    if (!config.env.name)
+                        throw new Error("Must define env name");
+                    if (!config.env.branch)
+                        throw new Error("Must define env branch");
+                    envName = config.env.name;
+                    branch = config.env.branch;
+                    if (!config.containers || config.containers.length == 0)
+                        return [2 /*return*/];
+                    containers = config.containers.map(function (c) {
+                        return {
+                            dir: c.dir,
+                            envVars: c.envVars.map(function (ev) {
+                                var secret = core.getInput(ev.secret, { required: true });
+                                return {
+                                    key: ev.name,
+                                    value: secret
+                                };
+                            })
+                        };
+                    });
+                    payload = createPayload(client, branch, envName, containers);
+                    console.log(payload);
+                    return [3 /*break*/, 3];
                 case 2:
-                    _a.sent();
-                    console.log("All enviornments are valid!");
-                    console.log(config);
-                    return [3 /*break*/, 4];
-                case 3:
                     err_1 = _a.sent();
                     core.error(err_1);
                     core.setFailed(err_1.message);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -124,16 +132,14 @@ function getConfig(client, path) {
         });
     });
 }
-function validateEnv(env) {
-    return new Promise(function (resolve, reject) {
-        if (!env.dir)
-            return reject(new Error("Missing enviornment directory."));
-        if (!env.name)
-            return reject(new Error("Missing enviornment name."));
-        if (!env.url)
-            return reject(new Error("Missing envornment deployment server url."));
-        return resolve(true);
-    });
+function createPayload(client, branch, envName, containers) {
+    var url = github.context.repo.repo;
+    return {
+        url: url,
+        branch: branch,
+        envName: envName,
+        containers: containers
+    };
 }
 
 
