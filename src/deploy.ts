@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
-import * as yaml from 'js-yaml';
+import axios, { AxiosError } from 'axios';
 import { Configuration, DeploymentEnv as DeploymentEnvironment } from './types';
 import { DeploymentContainer, DeploymentPayload } from './types/DeploymentPayload';
 
@@ -9,6 +9,7 @@ export async function run() {
   try {
     const token = core.getInput('repo-token', { required: true });
     const configPath = core.getInput('config', { required: true });
+    const deploymentUrl = core.getInput('deployment-url', { required: true });
 
     const client = github.getOctokit(token);
     const config = await getConfig(client, configPath);
@@ -34,9 +35,15 @@ export async function run() {
       };
     });
 
+    console.log("Compiling Payload...");  
     const payload = createPayload(client, branch, envName, containers);
+    console.log("Payload Compiled!");
 
-    console.log(JSON.stringify(payload, null, 2));
+    console.log("Deploying...");
+    sendPayload(client, deploymentUrl, payload).then(res => {
+      console.log("Deployed");
+    }).catch(err => {throw err})
+
 
   } catch (err) {
     core.error(err as Error);
@@ -64,6 +71,15 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<C
   });  
 }
 
+async function sendPayload(
+  github: InstanceType<typeof GitHub>, 
+  url: string,
+  payload: DeploymentPayload
+  ): Promise<any> {
+    return axios.post(url, payload)
+    .then(res => res.data)
+}
+
 function createPayload(
   client: InstanceType<typeof GitHub>, 
   branch: string, 
@@ -71,7 +87,7 @@ function createPayload(
   containers: DeploymentContainer[]
   ): DeploymentPayload {
 
-    const url = github.context.repo.repo;
+    const url = `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
 
     return {
       url,
