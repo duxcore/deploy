@@ -11,6 +11,9 @@ inputs:
   deployment-url:
     description: "The URL that the payload is deployed to."
     required: true
+  deployment-secret:
+    description: "The the secret used to authenticate the deployment."
+    required: true
 
 runs:
   using: "node12"

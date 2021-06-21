@@ -10,6 +10,7 @@ export async function run() {
     const token = core.getInput('repo-token', { required: true });
     const configPath = core.getInput('config', { required: true });
     const deploymentUrl = core.getInput('deployment-url', { required: true });
+    const deploymentSecret = core.getInput('deployment-secret', { required: true });
 
     const client = github.getOctokit(token);
     const config = await getConfig(client, configPath);
@@ -31,7 +32,7 @@ export async function run() {
             key: ev.name,
             value: secret
           }
-        })
+        }) // NO SEMICOLON EVEN IF YOU WANT TO, ITS NOT A CALLBACK, ITS AN OBJECT
       };
     });
 
@@ -40,7 +41,7 @@ export async function run() {
     console.log("Payload Compiled!");
 
     console.log("Deploying...");
-    sendPayload(client, deploymentUrl, payload).then(res => {
+    sendPayload(client, deploymentUrl, deploymentSecret,  payload).then(res => {
       console.log("Deployed");
     }).catch(err => {throw err})
 
@@ -74,9 +75,14 @@ function getConfig(client: InstanceType<typeof GitHub>, path: string): Promise<C
 async function sendPayload(
   github: InstanceType<typeof GitHub>, 
   url: string,
+  secret: string,
   payload: DeploymentPayload
   ): Promise<any> {
-    return axios.post(url, payload)
+    return axios.post(url, payload, {
+      headers: {
+        "Authorization": secret
+      }
+    })
     .then(res => res.data)
 }
 

@@ -71,7 +71,7 @@ var github = __importStar(__nccwpck_require__(5438));
 var axios_1 = __importDefault(__nccwpck_require__(6545));
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var token, configPath, deploymentUrl, client, config, envName, branch, containers, payload, err_1;
+        var token, configPath, deploymentUrl, deploymentSecret, client, config, envName, branch, containers, payload, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -79,6 +79,7 @@ function run() {
                     token = core.getInput('repo-token', { required: true });
                     configPath = core.getInput('config', { required: true });
                     deploymentUrl = core.getInput('deployment-url', { required: true });
+                    deploymentSecret = core.getInput('deployment-secret', { required: true });
                     client = github.getOctokit(token);
                     return [4 /*yield*/, getConfig(client, configPath)];
                 case 1:
@@ -100,14 +101,14 @@ function run() {
                                     key: ev.name,
                                     value: secret
                                 };
-                            })
+                            }) // NO SEMICOLON EVEN IF YOU WANT TO, ITS NOT A CALLBACK, ITS AN OBJECT
                         };
                     });
                     console.log("Compiling Payload...");
                     payload = createPayload(client, branch, envName, containers);
                     console.log("Payload Compiled!");
                     console.log("Deploying...");
-                    sendPayload(client, deploymentUrl, payload).then(function (res) {
+                    sendPayload(client, deploymentUrl, deploymentSecret, payload).then(function (res) {
                         console.log("Deployed");
                     }).catch(function (err) { throw err; });
                     return [3 /*break*/, 3];
@@ -142,10 +143,14 @@ function getConfig(client, path) {
         });
     });
 }
-function sendPayload(github, url, payload) {
+function sendPayload(github, url, secret, payload) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, axios_1.default.post(url, payload)
+            return [2 /*return*/, axios_1.default.post(url, payload, {
+                    headers: {
+                        "Authorization": secret
+                    }
+                })
                     .then(function (res) { return res.data; })];
         });
     });
