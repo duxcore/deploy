@@ -24,6 +24,14 @@ export async function run() {
     if (!config.containers || config.containers.length == 0) return;
 
     const containers: DeploymentContainer[] = config.containers.map(c => {
+
+      // debug
+      c.envVars.map(ev => {
+        console.log(`Fetching ${JSON.stringify(ev)}`);
+        const val = core.getInput(ev.secret, { required: true });
+        console.log(`Successfully fetched ${JSON.stringify(ev)}`)
+      })
+
       const object = {
         dir: c.dir,
         envVars: c.envVars.map(ev => {

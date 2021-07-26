@@ -93,6 +93,12 @@ function run() {
                     if (!config.containers || config.containers.length == 0)
                         return [2 /*return*/];
                     containers = config.containers.map(function (c) {
+                        // debug
+                        c.envVars.map(function (ev) {
+                            console.log("Fetching " + JSON.stringify(ev));
+                            var val = core.getInput(ev.secret, { required: true });
+                            console.log("Successfully fetched " + JSON.stringify(ev));
+                        });
                         var object = {
                             dir: c.dir,
                             envVars: c.envVars.map(function (ev) {
