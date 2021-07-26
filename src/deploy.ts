@@ -23,6 +23,15 @@ export async function run() {
 
     if (!config.containers || config.containers.length == 0) return;
 
+    // Debug
+    console.log({
+      token,
+      configPath,
+      client,
+      deploymentUrl,
+      deploymentSecret,
+    });
+
     const containers: DeploymentContainer[] = config.containers.map(c => {
       return {
         dir: c.dir,

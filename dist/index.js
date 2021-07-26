@@ -92,6 +92,14 @@ function run() {
                     branch = config.env.branch;
                     if (!config.containers || config.containers.length == 0)
                         return [2 /*return*/];
+                    // Debug
+                    console.log({
+                        token: token,
+                        configPath: configPath,
+                        client: client,
+                        deploymentUrl: deploymentUrl,
+                        deploymentSecret: deploymentSecret,
+                    });
                     containers = config.containers.map(function (c) {
                         return {
                             dir: c.dir,
