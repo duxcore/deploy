@@ -23,17 +23,8 @@ export async function run() {
 
     if (!config.containers || config.containers.length == 0) return;
 
-    // Debug
-    console.log({
-      token,
-      configPath,
-      client,
-      deploymentUrl,
-      deploymentSecret,
-    });
-
     const containers: DeploymentContainer[] = config.containers.map(c => {
-      return {
+      const object = {
         dir: c.dir,
         envVars: c.envVars.map(ev => {
           const secret = core.getInput(ev.secret, { required: true });
@@ -43,6 +34,7 @@ export async function run() {
           }
         }) // NO SEMICOLON EVEN IF YOU WANT TO, ITS NOT A CALLBACK, ITS AN OBJECT
       };
+      return object;
     });
 
     console.log("Compiling Payload...");  

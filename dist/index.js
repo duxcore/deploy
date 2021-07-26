@@ -92,16 +92,8 @@ function run() {
                     branch = config.env.branch;
                     if (!config.containers || config.containers.length == 0)
                         return [2 /*return*/];
-                    // Debug
-                    console.log({
-                        token: token,
-                        configPath: configPath,
-                        client: client,
-                        deploymentUrl: deploymentUrl,
-                        deploymentSecret: deploymentSecret,
-                    });
                     containers = config.containers.map(function (c) {
-                        return {
+                        var object = {
                             dir: c.dir,
                             envVars: c.envVars.map(function (ev) {
                                 var secret = core.getInput(ev.secret, { required: true });
@@ -111,6 +103,7 @@ function run() {
                                 };
                             }) // NO SEMICOLON EVEN IF YOU WANT TO, ITS NOT A CALLBACK, ITS AN OBJECT
                         };
+                        return object;
                     });
                     console.log("Compiling Payload...");
                     payload = createPayload(client, branch, envName, containers);
