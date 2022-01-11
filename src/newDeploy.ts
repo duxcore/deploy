@@ -11,6 +11,7 @@ export async function run() {
     const configPath = core.getInput("config", { required: false });
     const serviceId = core.getInput("service-id", { required: true });
     const serviceSecret = core.getInput("service-secret", { required: true });
+    const deploymentUrl = core.getInput("deployment-url", { required: true });
 
     const client = github.getOctokit(process.env.GITHUB_TOKEN as string);
     const config = await fetchConfig(client, github, configPath);
