@@ -1,11 +1,12 @@
+/*
 export interface Configuration {
-  env: DeploymentEnv
-  containers: EnvContainer[]
+  env: DeploymentEnv;
+  containers: EnvContainer[];
 }
 
 export interface EnvContainer {
   dir: string;
-  envVars: EnvVar[]
+  envVars: EnvVar[];
 }
 
 export interface DeploymentEnv {
@@ -17,3 +18,5 @@ export interface EnvVar {
   name: string; // name of the env var
   secret: string; // The name of the secret where the env var is stored
 }
+*/
+export default null;

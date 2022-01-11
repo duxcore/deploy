@@ -1,3 +1,3 @@
-import { run } from './deploy';
+import { run } from "./newDeploy";
 
 run();
