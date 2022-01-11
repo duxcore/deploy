@@ -1,6 +1,13 @@
 import { Configuration } from "../types/configuration";
 
 export default function validateConfig(config: Configuration): true | Error {
+  const globalPermittedObjectKeys = [
+    "image",
+    "Cmd",
+    "env",
+    "passthroughEnv",
+    "exposedPorts",
+  ];
   /**
    * Validate "image"
    */

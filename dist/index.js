@@ -1,6 +1,26 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 131:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+function createDeploymentConfiguration(config, serviceId, serviceSecret) {
+    return {
+        image: config.image,
+        service: {
+            id: serviceId,
+            secret: serviceSecret,
+        },
+    };
+}
+exports["default"] = createDeploymentConfiguration;
+
+
+/***/ }),
+
 /***/ 961:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -42,6 +62,13 @@ exports["default"] = fetchConfig;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 function validateConfig(config) {
+    const globalPermittedObjectKeys = [
+        "image",
+        "Cmd",
+        "env",
+        "passthroughEnv",
+        "exposedPorts",
+    ];
     /**
      * Validate "image"
      */
@@ -130,17 +157,22 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const github = __importStar(__nccwpck_require__(438));
+const createDeploymentConfiguration_1 = __importDefault(__nccwpck_require__(131));
 const fetchConfig_1 = __importDefault(__nccwpck_require__(961));
 const validateConfig_1 = __importDefault(__nccwpck_require__(101));
 async function run() {
     try {
         const configPath = core.getInput("config", { required: false });
+        const serviceId = core.getInput("service_id", { required: true });
+        const serviceSecret = core.getInput("service_secret", { required: true });
         const client = github.getOctokit(process.env.GITHUB_TOKEN);
         const config = await (0, fetchConfig_1.default)(client, github, configPath);
         const configValid = (0, validateConfig_1.default)(config);
         if (configValid !== true)
             throw configValid;
+        const deploymentConfig = (0, createDeploymentConfiguration_1.default)(config, serviceId, serviceSecret);
         console.log(config);
+        console.log(deploymentConfig);
         return;
     }
     catch (err) {
