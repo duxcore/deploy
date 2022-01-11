@@ -163,8 +163,8 @@ const validateConfig_1 = __importDefault(__nccwpck_require__(101));
 async function run() {
     try {
         const configPath = core.getInput("config", { required: false });
-        const serviceId = core.getInput("service_id", { required: true });
-        const serviceSecret = core.getInput("service_secret", { required: true });
+        const serviceId = core.getInput("service-id", { required: true });
+        const serviceSecret = core.getInput("service-secret", { required: true });
         const client = github.getOctokit(process.env.GITHUB_TOKEN);
         const config = await (0, fetchConfig_1.default)(client, github, configPath);
         const configValid = (0, validateConfig_1.default)(config);

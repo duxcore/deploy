@@ -9,8 +9,8 @@ import validateConfig from "./lib/validateConfig";
 export async function run() {
   try {
     const configPath = core.getInput("config", { required: false });
-    const serviceId = core.getInput("service_id", { required: true });
-    const serviceSecret = core.getInput("service_secret", { required: true });
+    const serviceId = core.getInput("service-id", { required: true });
+    const serviceSecret = core.getInput("service-secret", { required: true });
 
     const client = github.getOctokit(process.env.GITHUB_TOKEN as string);
     const config = await fetchConfig(client, github, configPath);
