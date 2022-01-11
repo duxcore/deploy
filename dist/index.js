@@ -2,22 +2,18 @@
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 961:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const github_1 = __importDefault(__nccwpck_require__(438));
-function fetchConfig(client, path) {
+function fetchConfig(client, github, path) {
     return new Promise((resolve, reject) => {
         console.log("Fetching configuration file...");
         client.rest.repos
             .getContent({
-            owner: github_1.default.context.repo.owner,
-            repo: github_1.default.context.repo.repo,
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
             path: path,
         })
             .then((res) => {
@@ -75,7 +71,7 @@ async function run() {
     try {
         const configPath = core.getInput("config", { required: false });
         const client = github.getOctokit(process.env.GITHUB_TOKEN);
-        const config = await (0, fetchConfig_1.default)(client, configPath);
+        const config = await (0, fetchConfig_1.default)(client, github, configPath);
         console.log(config);
         return;
     }

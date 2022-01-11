@@ -2,8 +2,6 @@ name: "Deployment"
 description: "Automatically deploy your applications to your deployment server"
 author: "Duxcore"
 inputs:
-  repo-token:
-    description: "The GITHUB_TOKEN secret"
   config:
     description: "The configuration path"
     default: ".deployment.json"

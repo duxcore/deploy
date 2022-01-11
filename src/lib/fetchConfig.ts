@@ -1,9 +1,10 @@
 import { GitHub } from "@actions/github/lib/utils";
-import github from "@actions/github";
+import gh from "@actions/github";
 import { Configuration } from "../types/configuration";
 
 export default function fetchConfig(
   client: InstanceType<typeof GitHub>,
+  github: typeof gh,
   path: string
 ): Promise<Configuration> {
   return new Promise((resolve, reject) => {
