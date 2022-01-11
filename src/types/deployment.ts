@@ -5,7 +5,7 @@ export interface DeploymentConfiguration {
   };
   image: string;
   commands?: string[];
-  env?: {
+  env: {
     [name: string]: string;
   };
   exposedPorts?: {

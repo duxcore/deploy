@@ -8,13 +8,18 @@
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 function createDeploymentConfiguration(config, serviceId, serviceSecret) {
-    return {
+    let depConf = {
         image: config.image,
         service: {
             id: serviceId,
             secret: serviceSecret,
         },
+        env: {},
     };
+    if (config.passthroughEnv) {
+        config.passthroughEnv.map((k) => (depConf.env[k] = process.env[k]));
+    }
+    return depConf;
 }
 exports["default"] = createDeploymentConfiguration;
 
