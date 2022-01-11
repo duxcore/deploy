@@ -19,6 +19,8 @@ function createDeploymentConfiguration(config, serviceId, serviceSecret) {
     if (config.passthroughEnv) {
         config.passthroughEnv.map((k) => (depConf.env[k] = process.env[k]));
     }
+    if (config.exposedPorts !== undefined)
+        depConf.exposedPorts = config.exposedPorts;
     return depConf;
 }
 exports["default"] = createDeploymentConfiguration;

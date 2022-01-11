@@ -21,5 +21,8 @@ export default function createDeploymentConfiguration(
     );
   }
 
+  if (config.exposedPorts !== undefined)
+    depConf.exposedPorts = config.exposedPorts;
+
   return depConf;
 }
