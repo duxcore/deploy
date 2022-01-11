@@ -46,6 +46,8 @@ function validateConfig(config) {
      * Validate "image"
      */
     if (typeof config.image !== "string")
+        return new Error(`Value "image" must be an instance of a string`);
+    if (!config.image)
         return new Error(`Value "image" missing from configuration file.`);
     /**
      * Validate "Cmd"
