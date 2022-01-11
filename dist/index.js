@@ -16,6 +16,8 @@ function createDeploymentConfiguration(config, serviceId, serviceSecret) {
         },
         env: (config.env ?? {}),
     };
+    if (config.Cmd !== undefined)
+        depConf.commands = config.Cmd;
     if (config.passthroughEnv) {
         config.passthroughEnv.map((k) => (depConf.env[k] = process.env[k]));
     }

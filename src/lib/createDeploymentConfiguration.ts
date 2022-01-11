@@ -15,6 +15,8 @@ export default function createDeploymentConfiguration(
     env: (config.env ?? {}) as DeploymentConfiguration["env"],
   };
 
+  if (config.Cmd !== undefined) depConf.commands = config.Cmd;
+
   if (config.passthroughEnv) {
     config.passthroughEnv.map(
       (k) => (depConf.env[k] = process.env[k] as string)
