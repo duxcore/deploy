@@ -12,7 +12,7 @@ export default function createDeploymentConfiguration(
       id: serviceId,
       secret: serviceSecret,
     },
-    env: {},
+    env: (config.env ?? {}) as DeploymentConfiguration["env"],
   };
 
   if (config.passthroughEnv) {
