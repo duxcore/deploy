@@ -15,7 +15,6 @@ export async function run() {
 
     return;
   } catch (err) {
-    core.error(err as Error);
     core.setFailed((err as Error).message);
   }
 }
