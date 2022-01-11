@@ -9,7 +9,7 @@ export async function run() {
     const configPath = core.getInput("config", { required: false });
 
     const client = github.getOctokit(process.env.GITHUB_TOKEN as string);
-    const config = await fetchConfig(client, configPath);
+    const config = await fetchConfig(client, github, configPath);
 
     console.log(config);
 
