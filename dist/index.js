@@ -184,6 +184,8 @@ async function run() {
         if (configValid !== true)
             throw configValid;
         const deploymentConfig = (0, createDeploymentConfiguration_1.default)(config, serviceId, serviceSecret);
+        console.log(config);
+        console.log(deploymentConfig);
         await axios_1.default
             .post(deploymentUrl, deploymentConfig, {
             headers: {
