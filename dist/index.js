@@ -195,7 +195,10 @@ async function run() {
             console.log(res.data);
         })
             .catch((err) => {
-            console.log(err.response?.data);
+            const data = err.response?.data;
+            if (!data.meta.timestamp)
+                return core.setFailed(`${err.code} | ${err.message}`);
+            return core.setFailed(data.message);
         });
         return;
     }
