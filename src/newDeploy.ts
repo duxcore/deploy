@@ -13,6 +13,9 @@ export async function run() {
     const serviceSecret = core.getInput("service-secret", { required: true });
     const deploymentUrl = core.getInput("deployment-url", { required: true });
 
+    const apiBearer = core.getInput("api-bearer", { required: true });
+    const apiSecret = core.getInput("api-secret", { required: true });
+
     const client = github.getOctokit(process.env.GITHUB_TOKEN as string);
     const config = await fetchConfig(client, github, configPath);
     const configValid = validateConfig(config);
@@ -25,8 +28,19 @@ export async function run() {
       serviceSecret
     );
 
-    console.log(config);
-    console.log(deploymentConfig);
+    await axios
+      .post(deploymentUrl, deploymentConfig, {
+        headers: {
+          bearer: apiBearer,
+          authorization: apiSecret,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response?.data);
+      });
 
     return;
   } catch (err) {
