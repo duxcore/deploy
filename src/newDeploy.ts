@@ -28,9 +28,6 @@ export async function run() {
       serviceSecret
     );
 
-    console.log(config);
-    console.log(deploymentConfig);
-
     await axios
       .post(deploymentUrl, deploymentConfig, {
         headers: {
