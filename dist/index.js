@@ -36,7 +36,7 @@ exports["default"] = createDeploymentConfiguration;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-function fetchConfig(client, github, path) {
+function fetchConfig(client, github, path, branch) {
     return new Promise((resolve, reject) => {
         console.log("Fetching configuration file...");
         client.rest.repos
@@ -44,6 +44,7 @@ function fetchConfig(client, github, path) {
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             path: path,
+            ref: branch,
         })
             .then((res) => {
             const raw = res.data["content"];
@@ -178,8 +179,9 @@ async function run() {
         const deploymentUrl = core.getInput("deployment-url", { required: true });
         const apiBearer = core.getInput("api-bearer", { required: true });
         const apiSecret = core.getInput("api-secret", { required: true });
+        const branch = core.getInput("branch", { required: true });
         const client = github.getOctokit(process.env.GITHUB_TOKEN);
-        const config = await (0, fetchConfig_1.default)(client, github, configPath);
+        const config = await (0, fetchConfig_1.default)(client, github, configPath, branch);
         const configValid = (0, validateConfig_1.default)(config);
         if (configValid !== true)
             throw configValid;
