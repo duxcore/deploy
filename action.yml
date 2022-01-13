@@ -23,7 +23,7 @@ inputs:
     required: true
   branch:
     description: "The branch that contains the most up to date configuration"
-    required: true
+    required: false
 
 runs:
   using: "node16"

@@ -39,13 +39,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 function fetchConfig(client, github, path, branch) {
     return new Promise((resolve, reject) => {
         console.log("Fetching configuration file...");
-        client.rest.repos
-            .getContent({
+        let getContentConfig = {
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             path: path,
-            ref: branch,
-        })
+        };
+        if (branch)
+            getContentConfig["ref"] = branch;
+        client.rest.repos
+            .getContent(getContentConfig)
             .then((res) => {
             const raw = res.data["content"];
             const buff = Buffer.from(raw, "base64");
@@ -179,7 +181,7 @@ async function run() {
         const deploymentUrl = core.getInput("deployment-url", { required: true });
         const apiBearer = core.getInput("api-bearer", { required: true });
         const apiSecret = core.getInput("api-secret", { required: true });
-        const branch = core.getInput("branch", { required: true });
+        const branch = core.getInput("branch", { required: false });
         const client = github.getOctokit(process.env.GITHUB_TOKEN);
         const config = await (0, fetchConfig_1.default)(client, github, configPath, branch);
         const configValid = (0, validateConfig_1.default)(config);
@@ -194,7 +196,7 @@ async function run() {
             },
         })
             .then((res) => {
-            console.log(res.data);
+            core.info("Successfully sent deploment request!");
         })
             .catch((err) => {
             const data = err.response?.data;

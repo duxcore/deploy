@@ -6,18 +6,21 @@ export default function fetchConfig(
   client: InstanceType<typeof GitHub>,
   github: typeof gh,
   path: string,
-  branch: string
+  branch?: string
 ): Promise<Configuration> {
   return new Promise((resolve, reject) => {
     console.log("Fetching configuration file...");
 
+    let getContentConfig = {
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      path: path,
+    };
+
+    if (branch) getContentConfig["ref"] = branch;
+
     client.rest.repos
-      .getContent({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
-        path: path,
-        ref: branch,
-      })
+      .getContent(getContentConfig)
       .then((res) => {
         const raw = res.data["content"];
         const buff = Buffer.from(raw, "base64");

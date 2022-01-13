@@ -16,7 +16,7 @@ export async function run() {
     const apiBearer = core.getInput("api-bearer", { required: true });
     const apiSecret = core.getInput("api-secret", { required: true });
 
-    const branch = core.getInput("branch", { required: true });
+    const branch = core.getInput("branch", { required: false });
 
     const client = github.getOctokit(process.env.GITHUB_TOKEN as string);
     const config = await fetchConfig(client, github, configPath, branch);
@@ -38,7 +38,7 @@ export async function run() {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        core.info("Successfully sent deploment request!");
       })
       .catch((err: AxiosError) => {
         const data = err.response?.data;
