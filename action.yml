@@ -15,6 +15,15 @@ inputs:
   service-secret:
     description: "The secret of the service you want to deploy."
     required: true
+  api-bearer:
+    description: "The bearer id of the api credentials."
+    required: true
+  api-secret:
+    description: "The api secret that authorizes the api bearer."
+    required: true
+  branch:
+    description: "The branch that contains the most up to date configuration"
+    required: true
 
 runs:
   using: "node16"

@@ -5,15 +5,18 @@ import { Configuration } from "../types/configuration";
 export default function fetchConfig(
   client: InstanceType<typeof GitHub>,
   github: typeof gh,
-  path: string
+  path: string,
+  branch: string
 ): Promise<Configuration> {
   return new Promise((resolve, reject) => {
     console.log("Fetching configuration file...");
+
     client.rest.repos
       .getContent({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         path: path,
+        ref: branch,
       })
       .then((res) => {
         const raw = res.data["content"];
